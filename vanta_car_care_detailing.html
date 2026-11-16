@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VANTA | Car Care &amp; Detailing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Configuración de colores personalizados para el tema oscuro con acentos morados/violetas de VANTA
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            vanta: {
+              black: '#060608',
+              card: '#0d0d12',
+              cardHover: '#14141c',
+              border: '#1f1f2e',
+              purple: '#8b5cf6',
+              purpleLight: '#a855f7',
+              purpleDark: '#6d28d9'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* Tipografía principal y desplazamiento suave entre secciones */
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #060608;
+      color: #f3f4f6;
+      scroll-behavior: smooth;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .purple-gradient {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    }
+    .purple-glow-sm {
+      box-shadow: 0 0 20px -4px rgba(139, 92, 246, 0.35);
+    }
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-vanta-purple selection:text-white bg-vanta-black text-gray-100">
+
+  <!-- Barra Superior de Anuncio -->
+  <div class="bg-gradient-to-r from-purple-950/60 via-vanta-purple/30 to-purple-950/60 border-b border-vanta-purple/25 py-2 px-4 text-center text-xs tracking-wider font-medium text-purple-200">
+    <i class="fa-solid fa-sparkles text-vanta-purpleLight mr-2"></i>
+    VANTA DETAILING &amp; CAR CARE — PRECIOS Y CATÁLOGOS ACTUALIZADOS
+  </div>
+
+  <!-- Barra de Navegación Principal -->
+  <nav class="sticky top-0 z-40 backdrop-blur-md bg-vanta-black/85 border-b border-vanta-border/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <!-- Identidad de Marca -->
+      <button type="button" onclick="switchTab('productos')" class="flex items-center gap-3 cursor-pointer text-left group">
+        <div class="w-10 h-10 rounded-xl purple-gradient flex items-center justify-center font-black text-2xl tracking-tighter text-white shadow-lg shadow-vanta-purple/40 group-hover:scale-105 transition-transform">
+          V
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-2xl tracking-widest text-white leading-none">VANTA</span>
+          <span class="text-[10px] tracking-[0.25em] text-vanta-purpleLight font-semibold uppercase mt-0.5">Detailing &amp; Car Care</span>
+        </div>
+      </button>
+
+      <!-- Pestañas de Navegación en Escritorio -->
+      <div class="hidden md:flex items-center gap-1 bg-vanta-card p-1.5 rounded-2xl border border-vanta-border">
+        <button id="tab-btn-productos" type="button" onclick="switchTab('productos')" class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-vanta-purple text-white shadow-md cursor-pointer">
+          <i class="fa-solid fa-store mr-2"></i>Catálogo Productos
+        </button>
+        <button id="tab-btn-detailing" type="button" onclick="switchTab('detailing')" class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white hover:bg-vanta-border/40 cursor-pointer">
+          <i class="fa-solid fa-spray-can-sparkles mr-2"></i>Servicios Detailing
+        </button>
+        <a href="#sobre-nosotros" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-vanta-border/40 transition-all duration-200">
+          Nosotros
+        </a>
+        <a href="#contacto" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-vanta-border/40 transition-all duration-200">
+          Contacto
+        </a>
+      </div>
+
+      <!-- Botón del Carrito -->
+      <button type="button" onclick="toggleCart()" aria-label="Abrir carrito" class="relative bg-vanta-card hover:bg-vanta-cardHover border border-vanta-border hover:border-vanta-purple/50 p-3 rounded-2xl flex items-center justify-center transition-all group cursor-pointer">
+        <i class="fa-solid fa-cart-shopping text-gray-300 group-hover:text-vanta-purpleLight text-lg transition-colors"></i>
+        <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-vanta-purple text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-vanta-black hidden">0</span>
+      </button>
+    </div>
+
+    <!-- Barra de Pestañas en Móvil -->
+    <div class="flex md:hidden border-t border-vanta-border/50 bg-vanta-card/60">
+      <button id="mobile-tab-btn-productos" type="button" onclick="switchTab('productos')" class="flex-1 py-3 text-xs font-semibold text-center text-vanta-purpleLight border-b-2 border-vanta-purple cursor-pointer">
+        <i class="fa-solid fa-store mr-1"></i> Productos
+      </button>
+      <button id="mobile-tab-btn-detailing" type="button" onclick="switchTab('detailing')" class="flex-1 py-3 text-xs font-semibold text-center text-gray-400 cursor-pointer">
+        <i class="fa-solid fa-spray-can-sparkles mr-1"></i> Servicios Detailing
+      </button>
+      <a href="#contacto" class="flex-1 py-3 text-xs font-semibold text-center text-gray-400">
+        <i class="fa-solid fa-phone mr-1"></i> Contacto
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenedor Principal -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-16">
+
+    <!-- SECCIÓN 1: CATÁLOGO DE PRODUCTOS -->
+    <section id="section-productos" class="space-y-8">
+      <!-- Banner Hero de Productos -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-vanta-card via-purple-950/25 to-vanta-card border border-vanta-border p-8 md:p-12">
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-vanta-purple/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 max-w-2xl space-y-4">
+          <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-vanta-purple/15 border border-vanta-purple/35 text-vanta-purpleLight text-xs font-semibold">
+            <i class="fa-solid fa-shield-halved"></i> Productos Oficiales Car Care
+          </span>
+          <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight">
+            Mantén tu vehículo con nivel de <span class="gradient-text">Exposición</span>
+          </h1>
+          <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+            Explorá nuestro catálogo completo de insumos de detailing profesional: shampoos, ceras, revividores, perfumes, microfibras y accesorios. Agregá al carrito y enviá tu pedido por WhatsApp.
+          </p>
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <button type="button" onclick="switchTab('detailing')" class="px-4 py-2.5 rounded-xl purple-gradient text-white text-xs font-bold shadow-md hover:opacity-95 transition cursor-pointer">
+              <i class="fa-solid fa-spray-can-sparkles mr-1.5"></i>Ver Servicios de Detailing
+            </button>
+            <a href="#contacto" class="px-4 py-2.5 rounded-xl bg-vanta-cardHover hover:bg-vanta-border border border-vanta-border text-gray-200 text-xs font-semibold transition">
+              Contacto y Redes
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buscador y Filtros por Categoría -->
+      <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+          <input
+            type="text"
+            id="product-search"
+            oninput="filterProducts()"
+            placeholder="Buscar producto por nombre o categoría..."
+            class="w-full pl-11 pr-4 py-3 bg-vanta-card border border-vanta-border rounded-2xl text-sm focus:outline-none focus:border-vanta-purple text-white placeholder-gray-500 transition-colors"
+          />
+        </div>
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none" id="category-filters">
+          <!-- Filtros generados dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Contador de Resultados -->
+      <div class="flex items-center justify-between text-xs text-gray-400">
+        <span id="products-counter">Mostrando 70 productos</span>
+        <span class="text-vanta-purpleLight font-medium">Precios en pesos (ARS)</span>
+      </div>
+
+      <!-- Cuadrícula de Productos -->
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <!-- Tarjetas generadas por JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: SERVICIOS DE DETAILING -->
+    <section id="section-detailing" class="space-y-10 hidden">
+      <!-- Banner Hero de Servicios -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-vanta-card via-purple-950/30 to-vanta-card border border-vanta-border p-8 md:p-12">
+        <div class="max-w-3xl space-y-4">
+          <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-vanta-purple/15 border border-vanta-purple/35 text-vanta-purpleLight text-xs font-semibold">
+            <i class="fa-solid fa-award"></i> Taller de Detailing Profesional
+          </span>
+          <h1 class="text-3xl md:text-5xl font-black text-white">
+            Lista de Precios <span class="gradient-text">Servicios Vanta</span>
+          </h1>
+          <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+            Precios vigentes para autos chicos y medianos. SUV, camionetas y vehículos de mayor tamaño tienen un valor superior debido a la superficie y nivel de preparación requeridos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Servicios para Automóviles -->
+      <div class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-vanta-border pb-4">
+          <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+            <i class="fa-solid fa-car text-vanta-purpleLight"></i> Servicios para Automóviles
+          </h2>
+          <span class="text-xs text-gray-400">Precios base para autos chicos/medianos</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Lavado Integral -->
+          <div class="bg-vanta-card border border-vanta-border rounded-3xl p-6 hover:border-vanta-purple/50 transition-all flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-purple-950/60 text-vanta-purpleLight border border-vanta-purple/30">Mantenimiento</span>
+                <span class="text-2xl font-extrabold text-white">$30.000</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Lavado Integral</h3>
+                <p class="text-xs text-gray-400 mt-1">SUV / Camionetas: desde $35.000</p>
+              </div>
+              <ul class="text-xs text-gray-300 space-y-2">
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Prelavado y lavado exterior minucioso</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Limpieza profunda de llantas, neumáticos y pasarruedas</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Secado con microfibras y aspirado interior completo</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Limpieza de plásticos, cristales y baúl</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Acondicionado de plásticos y neumáticos</li>
+              </ul>
+            </div>
+            <button type="button" onclick="bookingService('Lavado Integral', 30000)" class="w-full py-3 rounded-xl bg-vanta-border hover:bg-vanta-purple hover:text-white transition-colors text-xs font-semibold text-gray-200 cursor-pointer">
+              <i class="fa-solid fa-cart-plus mr-2"></i>Agregar al Carrito / Consultar
+            </button>
+          </div>
+
+          <!-- Abrillantado / Pre-Venta -->
+          <div class="bg-vanta-card border border-vanta-border rounded-3xl p-6 hover:border-vanta-purple/50 transition-all flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-purple-950/60 text-vanta-purpleLight border border-vanta-purple/30">Restauración Leve</span>
+                <span class="text-2xl font-extrabold text-white">$98.000</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Abrillantado / Pre-Venta</h3>
+                <p class="text-xs text-gray-400 mt-1">SUV / Camionetas: $120.000 a $140.000</p>
+              </div>
+              <ul class="text-xs text-gray-300 space-y-2">
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Todo lo incluido en el Lavado Integral</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Descontaminación completa de la pintura</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Pulido de 1 paso con pad de terminación</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Reducción de micro-rayas y ganancia de brillo</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Protección final incluida</li>
+              </ul>
+            </div>
+            <button type="button" onclick="bookingService('Abrillantado / Pre-Venta', 98000)" class="w-full py-3 rounded-xl bg-vanta-border hover:bg-vanta-purple hover:text-white transition-colors text-xs font-semibold text-gray-200 cursor-pointer">
+              <i class="fa-solid fa-cart-plus mr-2"></i>Agregar al Carrito / Consultar
+            </button>
+          </div>
+
+          <!-- Pulido Completo (2 Pasos) -->
+          <div class="bg-vanta-card border border-vanta-purple/40 rounded-3xl p-6 purple-glow-sm flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-vanta-purple/20 text-vanta-purpleLight border border-vanta-purple/40">Corrección Alta</span>
+                <span class="text-2xl font-extrabold text-white">$196.000</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Pulido Completo (2 Pasos)</h3>
+                <p class="text-xs text-gray-400 mt-1">SUV / Camionetas: $242.000 a $288.000</p>
+              </div>
+              <ul class="text-xs text-gray-300 space-y-2">
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Todo lo incluido en el Lavado Integral</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Descontaminación de pintura profunda</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Pulido de corte con pad de corte</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Pulido de terminación con pad finish</li>
+                <li><i class="fa-solid fa-check text-vanta-purpleLight mr-2"></i>Corrección de defectos y máxima claridad</li>
+              </ul>
+            </div>
+            <button type="button" onclick="bookingService('Pulido Completo 2 Pasos', 196000)" class="w-full py-3 rounded-xl purple-gradient hover:opacity-90 transition-opacity text-xs font-semibold text-white shadow-md cursor-pointer">
+              <i class="fa-solid fa-cart-plus mr-2"></i>Agregar al Carrito / Consultar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Tratamientos Cerámicos -->
+      <div class="space-y-6">
+        <div class="border-b border-vanta-border pb-4">
+          <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+            <i class="fa-solid fa-gem text-vanta-purpleLight"></i> Tratamientos Cerámicos (Coating Professional)
+          </h2>
+          <p class="text-xs text-gray-400 mt-1">Incluye lavado integral, descontaminado, preparación de pintura y aplicación profesional del coating cerámico.</p>
+        </div>
+
+        <div class="bg-vanta-card border border-vanta-border rounded-3xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-vanta-cardHover text-gray-400 text-xs uppercase tracking-wider">
+                <tr>
+                  <th class="py-4 px-6">Duración de la Protección</th>
+                  <th class="py-4 px-6">Autos Chicos / Medianos</th>
+                  <th class="py-4 px-6">SUV / Camionetas / Grandes</th>
+                  <th class="py-4 px-6 text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-vanta-border text-gray-200">
+                <tr class="hover:bg-vanta-cardHover/50 transition-colors">
+                  <td class="py-4 px-6 font-semibold text-white">Protección 1 a 2 Años</td>
+                  <td class="py-4 px-6 text-vanta-purpleLight font-bold">$403.000</td>
+                  <td class="py-4 px-6 text-gray-300">desde $518.000</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" onclick="bookingService('Cerámico 1-2 Años', 403000)" class="px-4 py-2 bg-vanta-border hover:bg-vanta-purple text-xs rounded-xl font-medium transition-colors cursor-pointer">Reservar</button>
+                  </td>
+                </tr>
+                <tr class="hover:bg-vanta-cardHover/50 transition-colors">
+                  <td class="py-4 px-6 font-semibold text-white">Protección 2 a 5 Años</td>
+                  <td class="py-4 px-6 text-vanta-purpleLight font-bold">$575.000</td>
+                  <td class="py-4 px-6 text-gray-300">desde $690.000</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" onclick="bookingService('Cerámico 2-5 Años', 575000)" class="px-4 py-2 bg-vanta-border hover:bg-vanta-purple text-xs rounded-xl font-medium transition-colors cursor-pointer">Reservar</button>
+                  </td>
+                </tr>
+                <tr class="hover:bg-vanta-cardHover/50 transition-colors">
+                  <td class="py-4 px-6 font-semibold text-white">Protección 5 a 10 Años</td>
+                  <td class="py-4 px-6 text-vanta-purpleLight font-bold">$805.000</td>
+                  <td class="py-4 px-6 text-gray-300">desde $920.000</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" onclick="bookingService('Cerámico 5-10 Años', 805000)" class="px-4 py-2 bg-vanta-border hover:bg-vanta-purple text-xs rounded-xl font-medium transition-colors cursor-pointer">Reservar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Servicios para Motos y Extras -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Motos -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2 border-b border-vanta-border pb-3">
+            <i class="fa-solid fa-motorcycle text-vanta-purpleLight"></i> Servicios Especiales para Motos
+          </h3>
+          <div class="space-y-3">
+            <div class="bg-vanta-card border border-vanta-border p-5 rounded-2xl flex justify-between items-center gap-4">
+              <div>
+                <h4 class="font-bold text-white">Lavado Detallado de Moto</h4>
+                <p class="text-xs text-gray-400">Lavado minucioso de carenado, chasis, motor, llantas y transmisión.</p>
+              </div>
+              <div class="text-right flex flex-col items-end gap-2 shrink-0">
+                <span class="text-lg font-extrabold text-vanta-purpleLight">$18.000</span>
+                <button type="button" onclick="bookingService('Lavado Detallado Moto', 18000)" class="px-3 py-1 bg-vanta-border hover:bg-vanta-purple text-[11px] rounded-lg cursor-pointer">Agendar</button>
+              </div>
+            </div>
+
+            <div class="bg-vanta-card border border-vanta-border p-5 rounded-2xl flex justify-between items-center gap-4">
+              <div>
+                <h4 class="font-bold text-white">Pulido de Moto</h4>
+                <p class="text-xs text-gray-400">Incluye lavado + descontaminación y pulido en tanque y plásticos pintados.</p>
+              </div>
+              <div class="text-right flex flex-col items-end gap-2 shrink-0">
+                <span class="text-lg font-extrabold text-vanta-purpleLight">$50.000</span>
+                <button type="button" onclick="bookingService('Pulido Moto', 50000)" class="px-3 py-1 bg-vanta-border hover:bg-vanta-purple text-[11px] rounded-lg cursor-pointer">Agendar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Servicios Extras -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2 border-b border-vanta-border pb-3">
+            <i class="fa-solid fa-wand-magic-sparkles text-vanta-purpleLight"></i> Servicios Extras
+          </h3>
+          <div class="space-y-3">
+            <div class="bg-vanta-card border border-vanta-border p-5 rounded-2xl flex justify-between items-center gap-4">
+              <div>
+                <h4 class="font-bold text-white">Restauración de Ópticas</h4>
+                <p class="text-xs text-gray-400">Lijado multietapa, pulido de transparencia y sellador UV (el par).</p>
+              </div>
+              <div class="text-right flex flex-col items-end gap-2 shrink-0">
+                <span class="text-lg font-extrabold text-vanta-purpleLight">$60.000</span>
+                <button type="button" onclick="bookingService('Restauración Ópticas', 60000)" class="px-3 py-1 bg-vanta-border hover:bg-vanta-purple text-[11px] rounded-lg cursor-pointer">Agendar</button>
+              </div>
+            </div>
+
+            <div class="bg-vanta-card border border-vanta-border p-5 rounded-2xl flex justify-between items-center gap-4">
+              <div>
+                <h4 class="font-bold text-white">Limpieza de Tapizados</h4>
+                <p class="text-xs text-gray-400">Inyección-extracción para telas o tratamiento de acondicionado para cuero.</p>
+              </div>
+              <div class="text-right flex flex-col items-end gap-2 shrink-0">
+                <span class="text-lg font-extrabold text-vanta-purpleLight">$40.000</span>
+                <button type="button" onclick="bookingService('Limpieza Tapizados', 40000)" class="px-3 py-1 bg-vanta-border hover:bg-vanta-purple text-[11px] rounded-lg cursor-pointer">Agendar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN SOBRE NOSOTROS -->
+    <section id="sobre-nosotros" class="bg-vanta-card border border-vanta-border rounded-3xl p-8 md:p-10 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-vanta-border pb-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-vanta-purpleLight">Sobre Nosotros</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white mt-1">VANTA Detailing &amp; Car Care</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="https://instagram.com/vanta_detailing_shop" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-vanta-cardHover hover:bg-vanta-purple text-xs font-semibold text-white border border-vanta-border transition">
+            <i class="fa-brands fa-instagram mr-1.5"></i>Instagram
+          </a>
+          <a href="https://wa.me/5493625529925" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl purple-gradient text-xs font-bold text-white shadow-md hover:opacity-95 transition">
+            <i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-300 leading-relaxed">
+        <p>
+          En <strong class="text-white">VANTA</strong> nos dedicamos al cuidado estético de autos y motos, combinando técnicas de detailing con insumos profesionales seleccionados.
+        </p>
+        <p>
+          Contamos con productos de líneas reconocidas como <strong class="text-vanta-purpleLight">Toxic Shine</strong> y <strong class="text-vanta-purpleLight">Laffitte</strong>, además de accesorios de lavado, pulido y terminación.
+        </p>
+        <p>
+          Podés armar tu pedido de productos o sumar servicios al carrito para coordinar turnos y entregas de forma rápida por WhatsApp.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN CONTACTO -->
+    <section id="contacto" class="bg-vanta-card border border-vanta-border rounded-3xl p-8 md:p-10 space-y-6">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-vanta-purpleLight">Contacto</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Canales Directos de Atención</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <a href="https://wa.me/5493625529925?text=Hola%20VANTA!%20Quisiera%20hacer%20una%20consulta." target="_blank" rel="noopener noreferrer" class="bg-vanta-black/70 hover:bg-vanta-cardHover border border-vanta-border hover:border-vanta-purple/50 rounded-2xl p-5 transition space-y-2">
+          <div class="text-vanta-purpleLight text-lg"><i class="fa-brands fa-whatsapp"></i></div>
+          <h3 class="font-bold text-white">WhatsApp</h3>
+          <p class="text-xs text-gray-400">+54 9 362 5529925</p>
+        </a>
+
+        <a href="https://instagram.com/vanta_detailing_shop" target="_blank" rel="noopener noreferrer" class="bg-vanta-black/70 hover:bg-vanta-cardHover border border-vanta-border hover:border-vanta-purple/50 rounded-2xl p-5 transition space-y-2">
+          <div class="text-vanta-purpleLight text-lg"><i class="fa-brands fa-instagram"></i></div>
+          <h3 class="font-bold text-white">Instagram</h3>
+          <p class="text-xs text-gray-400">@vanta_detailing_shop</p>
+        </a>
+
+        <div class="bg-vanta-black/70 border border-vanta-border rounded-2xl p-5 space-y-2">
+          <div class="text-vanta-purpleLight text-lg"><i class="fa-solid fa-location-dot"></i></div>
+          <h3 class="font-bold text-white">Ubicación</h3>
+          <p class="text-xs text-gray-400">Resistencia / Puerto Tirol, Chaco</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Panel Lateral (Drawer) del Carrito de Compras -->
+  <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div class="absolute inset-0 bg-black/75 backdrop-blur-xs transition-opacity" onclick="toggleCart(false)"></div>
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-md bg-vanta-card border-l border-vanta-border flex flex-col justify-between shadow-2xl">
+        <!-- Encabezado del Carrito -->
+        <div class="p-6 border-b border-vanta-border flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-cart-shopping text-vanta-purpleLight text-xl"></i>
+            <h2 class="text-lg font-bold text-white">Carrito de Compras</h2>
+          </div>
+          <button type="button" onclick="toggleCart(false)" class="text-gray-400 hover:text-white p-2 cursor-pointer" aria-label="Cerrar carrito">
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+
+        <!-- Lista de Ítems del Carrito -->
+        <div id="cart-items" class="p-6 overflow-y-auto flex-grow space-y-4">
+          <!-- Renderizado dinámico por JavaScript -->
+        </div>
+
+        <!-- Totales y Envío por WhatsApp -->
+        <div class="p-6 border-t border-vanta-border space-y-4 bg-vanta-black/50">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm text-gray-400">
+              <span>Subtotal:</span>
+              <span id="cart-subtotal" class="font-semibold text-white">$0</span>
+            </div>
+            <div class="flex justify-between text-base font-bold text-white">
+              <span>Total final:</span>
+              <span id="cart-total" class="text-vanta-purpleLight text-xl font-extrabold">$0</span>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label for="whatsapp-num" class="text-[11px] text-gray-400 uppercase font-bold tracking-wider">Número WhatsApp del Negocio:</label>
+            <input type="text" id="whatsapp-num" value="+5493625529925" class="w-full bg-vanta-black border border-vanta-border rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-vanta-purple" />
+          </div>
+
+          <div class="space-y-1">
+            <label for="client-name" class="text-[11px] text-gray-400 uppercase font-bold tracking-wider">Tu Nombre / Datos de Envío:</label>
+            <input type="text" id="client-name" placeholder="Ej: Gastón - Retiro o envío" class="w-full bg-vanta-black border border-vanta-border rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-vanta-purple" />
+          </div>
+
+          <button type="button" onclick="checkoutWhatsApp()" class="w-full py-4 rounded-xl purple-gradient hover:opacity-95 font-bold text-sm text-white flex items-center justify-center gap-3 shadow-lg shadow-vanta-purple/30 cursor-pointer">
+            <i class="fa-brands fa-whatsapp text-xl"></i> Enviar Pedido por WhatsApp
+          </button>
+
+          <!-- Mensaje informativo dentro del panel (nunca alert()) -->
+          <div id="cart-status-msg" class="hidden text-xs text-purple-200 bg-purple-950/60 border border-vanta-purple/40 rounded-xl px-3.5 py-2.5"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de Página -->
+  <footer class="bg-vanta-card border-t border-vanta-border mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md purple-gradient flex items-center justify-center font-bold text-xs text-white">V</div>
+        <span class="font-bold text-white tracking-widest">VANTA DETAILING</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://instagram.com/vanta_detailing_shop" target="_blank" rel="noopener noreferrer" class="hover:text-vanta-purpleLight transition">Instagram</a>
+        <a href="https://wa.me/5493625529925" target="_blank" rel="noopener noreferrer" class="hover:text-vanta-purpleLight transition">WhatsApp</a>
+      </div>
+      <p>© Noviembre 2026 VANTA. Todos los derechos reservados. Precios sujetos a actualización.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Carpeta base para las imágenes (vacío = misma carpeta raíz que index.html)
+    const CARPETA_BASE = "";
+
+    // Catálogo de 70 productos con precios en pesos argentinos (ARS) e imágenes mapeadas
+    const products = [
+      // Shampoos
+      { id: 1, name: 'Shampoo Banana (600ml)', price: 5600, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.36 (2).jpeg' },
+      { id: 2, name: 'Shampoo Wax (600ml)', price: 6500, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.36 (1).jpeg' },
+      { id: 3, name: 'Shampoo Pure Foam (600ml)', price: 7500, category: 'Shampoos' },
+      { id: 4, name: 'Shampoo Supreme (600ml)', price: 7000, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.47 (4).jpeg' },
+      { id: 5, name: 'Shampoo Hiper Black (600ml)', price: 7800, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.35.jpeg' },
+      { id: 6, name: 'Shampoo Luxury Foam (600ml)', price: 12000, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.34.jpeg' },
+      { id: 7, name: 'Shampoo Atomic (600ml)', price: 5600, category: 'Shampoos' },
+      { id: 8, name: 'Autopolish Lava Autos (500ml)', price: 6300, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.39 (5).jpeg' },
+      { id: 9, name: 'Shampoo Elite Distinction (600ml)', price: 7500, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.46.jpeg' },
+      { id: 10, name: 'Shampoo Dip-Club Distinction (600ml)', price: 7600, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.44 (3).jpeg' },
+      { id: 11, name: 'Shampoo Energy (600ml)', price: 7700, category: 'Shampoos' },
+      { id: 12, name: 'Shampoo Mud Wash (600ml)', price: 9600, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.49 (3).jpeg' },
+      { id: 13, name: 'Shampoo Citro Atomic (600ml)', price: 9200, category: 'Shampoos', image: 'WhatsApp Image 2026-11-04 at 21.22.49 (2).jpeg' },
+
+      // Ceras y Protección
+      { id: 14, name: 'Cera Cherry Quick (600ml)', price: 7000, category: 'Ceras y Protección', image: 'WhatsApp Image 2026-11-04 at 21.22.36 (3).jpeg' },
+      { id: 15, name: 'Cera Illusion Wax (600ml)', price: 8900, category: 'Ceras y Protección', image: 'WhatsApp Image 2026-11-04 at 21.22.36 (4).jpeg' },
+      { id: 16, name: 'Cera Lavish Hybrid (600ml)', price: 14500, category: 'Ceras y Protección' },
+      { id: 17, name: 'Cera Creme Wax Banana (600ml)', price: 7900, category: 'Ceras y Protección', image: 'WhatsApp Image 2026-11-04 at 21.22.42 (3).jpeg' },
+      { id: 18, name: 'Cera Extreme Detail (600ml)', price: 7200, category: 'Ceras y Protección', image: 'WhatsApp Image 2026-11-04 at 21.22.45 (1).jpeg' },
+      { id: 19, name: 'Cera Mystic Seal (600ml)', price: 7900, category: 'Ceras y Protección', image: 'WhatsApp Image 2026-11-04 at 21.22.43 (1).jpeg' },
+      { id: 20, name: 'Cera Luxury', price: 10700, category: 'Ceras y Protección' },
+      { id: 21, name: 'Cera The Boss Shine', price: 8900, category: 'Ceras y Protección', image: 'WhatsApp Image 2026-11-04 at 21.22.48 (5).jpeg' },
+
+      // Limpieza y Revitalizadores
+      { id: 22, name: 'Limpiador All Clean (600ml)', price: 6800, category: 'Limpieza', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (4).jpeg' },
+      { id: 23, name: 'Inferno Gel APC (600ml)', price: 8500, category: 'Limpieza', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (5).jpeg' },
+      { id: 24, name: 'CTRL-Z (600ml)', price: 9700, category: 'Limpieza', image: 'WhatsApp Image 2026-11-04 at 21.22.46 (4).jpeg' },
+      { id: 25, name: 'IRON WARNING (600ml)', price: 18400, category: 'Limpieza', image: 'WhatsApp Image 2026-11-04 at 21.22.46 (3).jpeg' },
+      { id: 26, name: 'Alkaline Wheels (600ml)', price: 7700, category: 'Limpieza', image: 'WhatsApp Image 2026-11-04 at 21.22.47 (2).jpeg' },
+      { id: 27, name: 'Revividor Bubble Gum (600ml)', price: 11000, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.36 (5).jpeg' },
+      { id: 28, name: 'Revividor Trim Look (600ml)', price: 11000, category: 'Revitalizadores' },
+      { id: 29, name: 'Revividor Uva Shake (600ml)', price: 11600, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37.jpeg' },
+      { id: 30, name: 'Revividor Energy Trim (600ml)', price: 11600, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (1).jpeg' },
+      { id: 31, name: 'Revividor Candy Cream (600ml)', price: 11600, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (2).jpeg' },
+      { id: 32, name: 'Revividor Creme Look (250ml)', price: 6200, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (7).jpeg' },
+      { id: 33, name: 'Revitalizador Hells (250ml)', price: 8200, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (6).jpeg' },
+      { id: 34, name: 'Revitalizador Dark Fluid (600ml)', price: 7500, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (3).jpeg' },
+      { id: 35, name: 'Revitalizador Gelshine (250ml)', price: 15000, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.37 (8).jpeg' },
+      { id: 36, name: 'Revitalizador NTP (250ml)', price: 6800, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.38.jpeg' },
+      { id: 37, name: 'Revividor Luxury Trim (250ml)', price: 7700, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.45.jpeg' },
+      { id: 38, name: 'Mango Go (600ml)', price: 11000, category: 'Revitalizadores', image: 'WhatsApp Image 2026-11-04 at 21.22.45 (2).jpeg' },
+
+      // Perfumes
+      { id: 39, name: 'Perfume Banana Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.39 (1).jpeg' },
+      { id: 40, name: 'Perfume Bubble Gum Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.39.jpeg' },
+      { id: 41, name: 'Perfume Party Summer Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.39 (3).jpeg' },
+      { id: 42, name: 'Perfume Cherry Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.44.jpeg' },
+      { id: 43, name: 'Perfume Rocket Power Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.44 (2).jpeg' },
+      { id: 44, name: 'Perfume Invictus Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.44 (1).jpeg' },
+      { id: 45, name: 'Perfume Uva Toxic Shine', price: 5500, category: 'Perfumes', image: 'WhatsApp Image 2026-11-04 at 21.22.43 (2).jpeg' },
+
+      // Microfibras y Paños
+      { id: 46, name: 'Microfibra Toxic Shine', price: 8700, category: 'Microfibras y Paños', image: 'WhatsApp Image 2026-11-04 at 21.22.38 (4).jpeg' },
+      { id: 47, name: 'Microfibra MCPT', price: 4000, category: 'Microfibras y Paños' },
+      { id: 48, name: 'Microfibra 30x30 Laffitte', price: 1500, category: 'Microfibras y Paños', image: 'WhatsApp Image 2026-11-04 at 21.22.46 (1).jpeg' },
+      { id: 49, name: 'Microfibra MCPT 50x70', price: 20500, category: 'Microfibras y Paños' },
+      { id: 50, name: 'Microfibra Crocos 30x60', price: 7500, category: 'Microfibras y Paños', image: 'WhatsApp Image 2026-11-04 at 21.22.46 (6).jpeg' },
+      { id: 51, name: 'Chamoice Azul Laffitte', price: 3900, category: 'Microfibras y Paños', image: 'WhatsApp Image 2026-11-04 at 21.22.46 (1).jpeg' },
+      { id: 52, name: 'Plumero de Microfibra Laffitte', price: 4000, category: 'Microfibras y Paños' },
+      { id: 53, name: 'Microfibra 40x80 Laffitte', price: 5500, category: 'Microfibras y Paños', image: 'WhatsApp Image 2026-11-04 at 21.22.47.jpeg' },
+
+      // Aplicadores, Guantes, Cepillos, Brochas y Accesorios
+      { id: 54, name: 'Guante de Microfibra Laffitte', price: 6000, category: 'Aplicadores y Guantes', image: 'WhatsApp Image 2026-11-04 at 21.22.38 (3).jpeg' },
+      { id: 55, name: 'Guante Cara Simple Laffitte', price: 3500, category: 'Aplicadores y Guantes', image: 'WhatsApp Image 2026-11-04 at 21.22.47 (3).jpeg' },
+      { id: 56, name: 'Aplicador Microfibra Laffitte', price: 1800, category: 'Aplicadores y Guantes', image: 'WhatsApp Image 2026-11-04 at 21.22.47 (1).jpeg' },
+      { id: 57, name: 'Aplicador Poliespuma Laffitte', price: 750, category: 'Aplicadores y Guantes', image: 'WhatsApp Image 2026-11-04 at 21.22.49 (1).jpeg' },
+      { id: 58, name: 'Esponja Azul Laffitte', price: 3200, category: 'Aplicadores y Guantes', image: 'WhatsApp Image 2026-11-04 at 21.22.38 (5).jpeg' },
+      { id: 59, name: 'Aplicador para Cubiertas', price: 2500, category: 'Aplicadores y Guantes', image: 'WhatsApp Image 2026-11-04 at 21.22.40 (3).jpeg' },
+      { id: 60, name: 'Cepillo Llantas/Alfombras Laffitte', price: 4800, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.40 (1).jpeg' },
+      { id: 61, name: 'Cepillo Daytona Crocos Negro', price: 4800, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.47 (5).jpeg' },
+      { id: 62, name: 'Brocha Overcars Cerdas Duras', price: 3000, category: 'Cepillos y Brochas' },
+      { id: 63, name: 'Set x5 Brochas MCPT', price: 7500, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.41.jpeg' },
+      { id: 64, name: 'Set x3 Brochas MCPT', price: 6000, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.42 (2).jpeg' },
+      { id: 65, name: 'Brocha N10 MCPT', price: 3000, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.40 (2).jpeg' },
+      { id: 66, name: 'Brocha para Interior Laffitte', price: 3500, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.42 (1).jpeg' },
+      { id: 67, name: 'Cepillo para Tapizados', price: 9800, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.41 (1).jpeg' },
+      { id: 68, name: 'Kit x3 Brochas c/Soporte Laffitte', price: 28000, category: 'Cepillos y Brochas', image: 'WhatsApp Image 2026-11-04 at 21.22.49 (4).jpeg' },
+      { id: 69, name: 'Foam Lance MCPT', price: 19700, category: 'Accesorios Varios', image: 'WhatsApp Image 2026-11-04 at 21.22.48 (2).jpeg' },
+      { id: 70, name: 'Foammer Premium Laffitte', price: 21600, category: 'Accesorios Varios', image: 'WhatsApp Image 2026-11-04 at 21.22.49.jpeg' }
+    ];
+
+    let cart = [];
+    let selectedCategory = 'Todos';
+
+    // Formatea un número entero como moneda ARS
+    function formatARS(num) {
+      return '$' + Number(num || 0).toLocaleString('es-AR');
+    }
+
+    // Escapa comillas simples para atributos HTML generados dinámicamente
+    function escapeAttr(str) {
+      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    // Escapa texto para mostrar de forma segura en atributos o respaldos visuales
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Construye la ruta completa de imagen aplicando CARPETA_BASE y codificación segura de espacios/paréntesis
+    function getProductImageUrl(imageName) {
+      if (!imageName) return '';
+      const cleanName = String(imageName).replace(/^\/+/, '');
+      const prefix = CARPETA_BASE ? String(CARPETA_BASE).replace(/\/+$/, '') + '/' : '';
+      return prefix + encodeURI(cleanName);
+    }
+
+    // Maneja el fallo de carga de imagen mostrando un respaldo visual limpio con el nombre del producto
+    function handleImageFallback(imgEl, productName) {
+      if (!imgEl || !imgEl.parentElement) return;
+      const fallback = document.createElement('div');
+      fallback.className = 'w-full h-full flex flex-col items-center justify-center p-3 text-center bg-gradient-to-br from-purple-950/45 via-zinc-950 to-vanta-card text-purple-200 select-none';
+      fallback.innerHTML = `
+        <i class="fa-solid fa-spray-can-sparkles text-vanta-purpleLight text-xl mb-1.5 opacity-85"></i>
+        <span class="text-[11px] font-bold leading-tight line-clamp-2 text-gray-200">${escapeHTML(productName)}</span>
+        <span class="text-[9px] uppercase tracking-wider text-purple-300/75 mt-1">VANTA Car Care</span>
+      `;
+      imgEl.replaceWith(fallback);
+    }
+
+    // Genera el bloque de imagen de tarjeta con respaldo visual si no hay foto o si falla al cargar
+    function renderProductMedia(product) {
+      const url = getProductImageUrl(product.image);
+      if (!url) {
+        return `
+          <div class="w-full h-40 rounded-xl overflow-hidden border border-vanta-border/80 bg-vanta-black flex flex-col items-center justify-center p-3 text-center bg-gradient-to-br from-purple-950/45 via-zinc-950 to-vanta-card">
+            <i class="fa-solid fa-spray-can-sparkles text-vanta-purpleLight text-xl mb-1.5 opacity-85"></i>
+            <span class="text-[11px] font-bold leading-tight line-clamp-2 text-gray-200">${escapeHTML(product.name)}</span>
+            <span class="text-[9px] uppercase tracking-wider text-purple-300/75 mt-1">VANTA Car Care</span>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="w-full h-40 rounded-xl overflow-hidden border border-vanta-border/80 bg-vanta-black">
+          <img
+            src="${url}"
+            alt="${escapeHTML(product.name)}"
+            loading="lazy"
+            onerror="handleImageFallback(this, '${escapeAttr(product.name)}')"
+            class="w-full h-40 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      `;
+    }
+
+    // Muestra un aviso no bloqueante dentro del panel del carrito
+    function setCartStatus(message) {
+      const box = document.getElementById('cart-status-msg');
+      if (!box) return;
+      if (!message) {
+        box.classList.add('hidden');
+        box.textContent = '';
+        return;
+      }
+      box.textContent = message;
+      box.classList.remove('hidden');
+    }
+
+    // Alterna entre las pestañas principales de Productos y Servicios Detailing
+    function switchTab(tab) {
+      try {
+        const secProd = document.getElementById('section-productos');
+        const secDet = document.getElementById('section-detailing');
+        const btnProd = document.getElementById('tab-btn-productos');
+        const btnDet = document.getElementById('tab-btn-detailing');
+        const mobProd = document.getElementById('mobile-tab-btn-productos');
+        const mobDet = document.getElementById('mobile-tab-btn-detailing');
+
+        if (tab === 'productos') {
+          secProd.classList.remove('hidden');
+          secDet.classList.add('hidden');
+          btnProd.className = 'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-vanta-purple text-white shadow-md cursor-pointer';
+          btnDet.className = 'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white hover:bg-vanta-border/40 cursor-pointer';
+          mobProd.className = 'flex-1 py-3 text-xs font-semibold text-center text-vanta-purpleLight border-b-2 border-vanta-purple cursor-pointer';
+          mobDet.className = 'flex-1 py-3 text-xs font-semibold text-center text-gray-400 cursor-pointer';
+        } else {
+          secProd.classList.add('hidden');
+          secDet.classList.remove('hidden');
+          btnDet.className = 'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-vanta-purple text-white shadow-md cursor-pointer';
+          btnProd.className = 'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white hover:bg-vanta-border/40 cursor-pointer';
+          mobDet.className = 'flex-1 py-3 text-xs font-semibold text-center text-vanta-purpleLight border-b-2 border-vanta-purple cursor-pointer';
+          mobProd.className = 'flex-1 py-3 text-xs font-semibold text-center text-gray-400 cursor-pointer';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error('Error al cambiar de pestaña:', err);
+      }
+    }
+
+    // Renderiza los botones de filtro por categoría
+    function renderCategories() {
+      const categories = ['Todos', ...new Set(products.map(p => p.category))];
+      const container = document.getElementById('category-filters');
+      container.innerHTML = categories.map(cat => {
+        const active = cat === selectedCategory;
+        return `
+          <button
+            type="button"
+            onclick="selectCategory('${escapeAttr(cat)}')"
+            class="shrink-0 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              active
+                ? 'bg-vanta-purple text-white shadow-md shadow-vanta-purple/30'
+                : 'bg-vanta-card text-gray-400 hover:text-white border border-vanta-border'
+            }"
+          >${cat}</button>
+        `;
+      }).join('');
+    }
+
+    function selectCategory(cat) {
+      selectedCategory = cat;
+      renderCategories();
+      filterProducts();
+    }
+
+    function filterProducts() {
+      const q = (document.getElementById('product-search').value || '').toLowerCase().trim();
+      const filtered = products.filter(p => {
+        const matchCat = selectedCategory === 'Todos' || p.category === selectedCategory;
+        const matchText = !q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+        return matchCat && matchText;
+      });
+      document.getElementById('products-counter').textContent =
+        `Mostrando ${filtered.length} ${filtered.length === 1 ? 'producto' : 'productos'}`;
+      renderProducts(filtered);
+    }
+
+    // Renderiza las tarjetas de productos en la cuadrícula
+    function renderProducts(list = products) {
+      const grid = document.getElementById('products-grid');
+      if (!list.length) {
+        grid.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400 text-sm bg-vanta-card border border-vanta-border rounded-2xl">No se encontraron productos con ese criterio.</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map(p => `
+        <article class="group bg-vanta-card border border-vanta-border hover:border-vanta-purple/50 rounded-2xl p-4 flex flex-col justify-between gap-4 transition-all">
+          <div class="space-y-3">
+            ${renderProductMedia(p)}
+            <div class="space-y-1.5">
+              <span class="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-950/60 text-vanta-purpleLight border border-vanta-purple/25">${p.category}</span>
+              <h3 class="font-bold text-white text-sm leading-snug">${p.name}</h3>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-3 border-t border-vanta-border/60">
+            <span class="text-lg font-extrabold text-white">${formatARS(p.price)}</span>
+            <button
+              type="button"
+              onclick="addToCart('prod-' + ${p.id}, '${escapeAttr(p.name)}', ${p.price}, '${escapeAttr(p.image || '')}')"
+              class="px-3.5 py-2 rounded-xl purple-gradient hover:opacity-95 text-white text-xs font-bold transition cursor-pointer"
+            >
+              <i class="fa-solid fa-plus mr-1"></i>Agregar
+            </button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Agrega un servicio de detailing al carrito y abre el panel lateral
+    function bookingService(serviceName, price) {
+      const key = 'srv-' + serviceName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      addToCart(key, 'Servicio: ' + serviceName, price, '');
+      toggleCart(true);
+    }
+
+    // Agrega o incrementa un ítem en el carrito
+    function addToCart(key, name, price, image = '') {
+      try {
+        const existing = cart.find(item => item.key === key);
+        if (existing) {
+          existing.qty += 1;
+        } else {
+          cart.push({ key, name, price: Number(price), qty: 1, image });
+        }
+        setCartStatus('');
+        updateCartUI();
+      } catch (err) {
+        console.error('Error al agregar al carrito:', err);
+      }
+    }
+
+    // Modifica la cantidad de un ítem o lo elimina si llega a 0
+    function changeQty(key, delta) {
+      const idx = cart.findIndex(item => item.key === key);
+      if (idx === -1) return;
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) {
+        cart.splice(idx, 1);
+      }
+      setCartStatus('');
+      updateCartUI();
+    }
+
+    // Actualiza insignia, lista de ítems y totales del carrito
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const itemsContainer = document.getElementById('cart-items');
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const totalEl = document.getElementById('cart-total');
+
+      const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+      const totalAmount = cart.reduce((acc, i) => acc + i.price * i.qty, 0);
+
+      if (totalQty > 0) {
+        badge.textContent = totalQty;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      subtotalEl.textContent = formatARS(totalAmount);
+      totalEl.textContent = formatARS(totalAmount);
+
+      if (!cart.length) {
+        itemsContainer.innerHTML = '<div class="text-center py-12 text-gray-400 text-sm">Tu carrito está vacío. Agregá productos o servicios.</div>';
+        return;
+      }
+
+      itemsContainer.innerHTML = cart.map(item => {
+        const imgUrl = getProductImageUrl(item.image);
+        const thumbHtml = imgUrl
+          ? `<img src="${imgUrl}" alt="${escapeHTML(item.name)}" onerror="handleImageFallback(this, '${escapeAttr(item.name)}')" class="w-12 h-12 rounded-xl object-cover border border-vanta-border shrink-0 bg-vanta-card" />`
+          : `<div class="w-12 h-12 rounded-xl border border-vanta-border shrink-0 bg-purple-950/40 flex items-center justify-center text-vanta-purpleLight"><i class="fa-solid ${item.key.startsWith('srv-') ? 'fa-spray-can-sparkles' : 'fa-box-open'} text-sm"></i></div>`;
+
+        return `
+          <div class="bg-vanta-black/70 border border-vanta-border rounded-2xl p-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              ${thumbHtml}
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">${item.name}</h4>
+                <p class="text-xs text-vanta-purpleLight font-semibold mt-0.5">${formatARS(item.price)} c/u</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="changeQty('${escapeAttr(item.key)}', -1)" class="w-7 h-7 rounded-lg bg-vanta-border hover:bg-vanta-purple text-white text-xs font-bold cursor-pointer">-</button>
+              <span class="text-xs font-bold text-white w-5 text-center">${item.qty}</span>
+              <button type="button" onclick="changeQty('${escapeAttr(item.key)}', 1)" class="w-7 h-7 rounded-lg bg-vanta-border hover:bg-vanta-purple text-white text-xs font-bold cursor-pointer">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Abre o cierra el panel lateral del carrito
+    function toggleCart(forceOpen = null) {
+      const drawer = document.getElementById('cart-drawer');
+      const isHidden = drawer.classList.contains('hidden');
+      const shouldOpen = forceOpen !== null ? forceOpen : isHidden;
+      if (shouldOpen) {
+        drawer.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+      }
+    }
+
+    // Construye y abre el enlace de WhatsApp con el resumen del pedido
+    function checkoutWhatsApp() {
+      if (!cart.length) {
+        setCartStatus('Agregá al menos un producto o servicio antes de enviar el pedido.');
+        return;
+      }
+
+      try {
+        const rawPhone = (document.getElementById('whatsapp-num').value || '').replace(/\D/g, '') || '5493625529925';
+        const client = (document.getElementById('client-name').value || '').trim();
+        const totalAmount = cart.reduce((acc, i) => acc + i.price * i.qty, 0);
+
+        const lines = cart.map(i => `• ${i.qty}x ${i.name} (${formatARS(i.price * i.qty)})`).join('\n');
+        let msg = `Hola *VANTA Detailing*! Quiero realizar este pedido:\n\n${lines}\n\n*Total:* ${formatARS(totalAmount)}`;
+        if (client) {
+          msg += `\n*Cliente / Envío:* ${client}`;
+        }
+
+        const waUrl = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+        setCartStatus('Pedido armado para WhatsApp. Si no se abrió automáticamente, revisá el bloqueador de ventanas emergentes.');
+      } catch (err) {
+        console.error('Error al generar enlace de WhatsApp:', err);
+        setCartStatus('No se pudo abrir WhatsApp. Verificá el número ingresado.');
+      }
+    }
+
+    // Inicialización de la vista previa
+    renderCategories();
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
